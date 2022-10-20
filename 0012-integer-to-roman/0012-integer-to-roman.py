@@ -6,5 +6,5 @@ class Solution:
         ans = ''
         for i in range(len(symbol)):
             ans += symbol[i]*int(num/value[i])
-            num = num%value[i]
+            num %= value[i]
         return ans
