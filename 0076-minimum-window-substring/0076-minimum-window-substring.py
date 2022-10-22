@@ -17,7 +17,13 @@ class Solution:
                     j = table[char].index(init)
                     table[char][j] = i
                     capacity-=1
-                    if start==None:  start=i   # initial start       
+                    if start==None:  start=i   # initial start
+                        
+                    if capacity==0:  # table is filled，計算mini
+                        end = i+1
+                        if end-start<mini:
+                            ans = s[start:end]
+                            mini = end-start
                 except:
                     j = table[char].index(min(table[char]))
                     if table[char][j]==start:  # 如果start要被取代，重找start 
@@ -25,13 +31,14 @@ class Solution:
                         start= init
                         for k,v in table.items():
                             start = min(min(v),start)
+                            
+                        # start重算後，mini也要檢查
+                        if capacity==0:  # table is filled    
+                            end = i+1
+                            if end-start<mini:
+                                ans = s[start:end]
+                                mini = end-start 
                     else:
                         table[char][j] = i
-                        
-                if capacity==0:  # table is filled
-                    end = i+1
-                    if end-start<mini:
-                        ans = s[start:end]
-                        mini = end-start
         
         return ans
