@@ -1,26 +1,36 @@
 class Solution {
 public:
-    int maxLength(vector<string>& arr) {
-        vector<int> a;
-
-        for (const string& x : arr) {
-            set<char> s(begin(x), end(x));
-            cout << s.size();
-            if (s.size() != x.length()) continue;
-            a.push_back(0);      
-            for (char c : x) a.back() |= 1 << (c - 'a');      
+    struct permute{
+        vector<string> array;
+        string cur;
+        int idx;
+    };
+    void dfs(permute tmp){
+        for(int i=tmp.idx;i<tmp.array.size();i++){
+            string s = tmp.cur+tmp.array[i];
+            bool flag=true;
+            for(int j=0;j<s.length();j++){
+                if(count(s.begin(),s.end(),s[j])>1){
+                    flag=false;
+                    break;
+                }
+            }
+            if(flag){
+                permute next = tmp;
+                next.cur+=next.array[i];
+                if(next.cur.length()>ans){
+                    ans = next.cur.length();
+                }
+                next.idx = i+1;
+                dfs(next);
+            }
         }
-
-        int ans = 0;
-
-        function<void(int, int)> dfs = [&](int s, int cur) {
-            ans = max(ans, __builtin_popcount(cur));
-            for (int i = s; i < a.size(); ++i)
-                if ((cur & a[i]) == 0)
-                dfs(i + 1, cur | a[i]);      
-        };
-
-        dfs(0, 0);
+    }
+    int maxLength(vector<string>& arr) {
+        permute tmp{arr,"",0};
+        dfs(tmp);
         return ans;
     }
+private:
+    int ans = 0;
 };
